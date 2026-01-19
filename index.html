@@ -72,6 +72,28 @@ button.active{
   cursor:pointer;
   box-shadow:0 0 25px rgba(56,189,248,.45);
 }
+
+button.tg{
+  margin-top:14px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#020617;
+  box-shadow:0 0 25px rgba(34,197,94,.45);
+  cursor:pointer;
+}
+.ad-box{
+  max-height: 160px;          /* 👈 ad ko limit */
+  overflow: hidden;           /* 👈 extra content cut */
+  margin: 14px 0;
+  border-radius: 12px;
+  background: rgba(15,23,42,.6);
+}
+
+/* Native banner images control */
+.ad-box img,
+.ad-box iframe{
+  max-height: 160px !important;
+  object-fit: contain;
+}
 </style>
 </head>
 
@@ -85,6 +107,13 @@ button.active{
   </div>
 
   <div class="timer" id="count">10</div>
+  <!-- Adsterra Native Banner -->
+<div class="ad-box">
+  <script async="async" data-cfasync="false"
+    src="https://pl28515428.effectivegatecpm.com/1c897d0a1597b55d0d6ee4e01f2fb496/invoke.js">
+  </script>
+  <div id="container-1c897d0a1597b55d0d6ee4e01f2fb496"></div>
+</div>
 
   <button id="btn">Continue Verification</button>
 </div>
@@ -93,16 +122,33 @@ button.active{
 const AD_LINK =
   "https://www.effectivegatecpm.com/qc7ch8wiw4?key=bb839d04666cd63e6a3cb3dbeeaa2c88";
 
+/* 🔁 CHANGE ONLY THIS */
+const BOT_USERNAME = "Insta_Info_Tracker_Bot";
+
 /* ---------- SVG ICON ---------- */
 const CHECK_SVG = `
 <svg width="34" height="34" viewBox="0 0 24 24" fill="none"
      xmlns="http://www.w3.org/2000/svg">
   <path d="M20 6L9 17L4 12"
-        stroke="#38bdf8"
+        stroke="#22c55e"
         stroke-width="3"
         stroke-linecap="round"
         stroke-linejoin="round"/>
 </svg>`;
+
+/* ---------- OPEN TELEGRAM APP (NOT CHROME) ---------- */
+function openTelegram(){
+  const deepLink = "tg://resolve?domain=" + BOT_USERNAME + "&start=verify";
+  const webFallback = "https://t.me/" + BOT_USERNAME + "?start=verify";
+
+  // Try opening Telegram app
+  window.location.href = deepLink;
+
+  // Fallback to web after 1.2s (if app not installed)
+  setTimeout(() => {
+    window.location.href = webFallback;
+  }, 1200);
+}
 
 /* ---------- SHOW VERIFIED SCREEN ---------- */
 function showVerifiedScreen(){
@@ -115,8 +161,12 @@ function showVerifiedScreen(){
     </div>
 
     <div class="desc">
-      Return to Telegram and tap <b>Verify</b> to continue.
+      Tap below to return to Telegram and complete verification.
     </div>
+
+    <button class="tg" onclick="openTelegram()">
+      Continue to Telegram
+    </button>
   `;
 }
 
