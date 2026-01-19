@@ -171,9 +171,19 @@ function showVerifiedScreen(){
 }
 
 /* ---------- HANDLE BACK ---------- */
-window.addEventListener("pageshow", function () {
-  if (sessionStorage.getItem("verified_step") === "done") {
-    showVerifiedScreen();
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    const done = sessionStorage.getItem("verified_step");
+    const t = sessionStorage.getItem("ad_time");
+    
+    if (done && t) {
+      const diff = Date.now() - parseInt(t, 10);
+      
+      // Telegram ke liye realistic threshold
+      if (diff >= 6000) {
+        showVerifiedScreen();
+      }
+    }
   }
 });
 
@@ -196,10 +206,17 @@ if (btn) {
   }, 1000);
 
   btn.onclick = () => {
-    if (!btn.classList.contains("active")) return;
-    sessionStorage.setItem("verified_step","done");
-    window.location.href = AD_LINK;
-  };
+  if (!btn.classList.contains("active")) return;
+
+  sessionStorage.setItem("verified_step","done");
+  sessionStorage.setItem("ad_time", Date.now());
+
+  // open ad in new tab / window
+  window.open(AD_LINK, "_blank", "noopener,noreferrer");
+
+  // instantly show verified screen
+  showVerifiedScreen();
+};
 }
 </script>
 
